@@ -1,11 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Edge {
-    int u, v;
-    long long w;
-};
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -13,22 +8,27 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    vector<Edge> edges(m);
+    vector<pair<int, long>> adj[n+1];
     for (int i = 0; i < m; i++) {
-        cin >> edges[i].u >> edges[i].v >> edges[i].w;
+        int u, v, w;
+        cin >> u >> v >> w;
+
+        adj[u].push_back({v, w});
     }
 
     vector<long long> dist(n + 1, 0);
     vector<int> parent(n + 1, -1);
 
     int x = -1;
-    for (int i = 1; i <= n; i++) {
+    for(int i = 1; i <= n; i++){
         x = -1;
-        for (auto &e : edges) {
-            if (dist[e.v] > dist[e.u] + e.w) {
-                dist[e.v] = dist[e.u] + e.w;
-                parent[e.v] = e.u;
-                x = e.v;
+        for (int u = 1; u <= n; u++) {
+            for (auto &[v, w] : adj[u]) {
+                if (dist[v] > dist[u] + w) {
+                    dist[v] = dist[u] + w;
+                    parent[v] = u;
+                    x = v;
+                }
             }
         }
     }
@@ -37,7 +37,6 @@ int main() {
         cout << "NO\n";
     } else {
         cout << "YES\n";
-        // ensure x is inside the cycle
         for (int i = 0; i < n; i++) {
             x = parent[x];
         }
@@ -51,7 +50,7 @@ int main() {
         cycle.push_back(x);
 
         reverse(cycle.begin(), cycle.end());
-        for (int node : cycle) cout << node << " ";
+        for (int it : cycle) cout << it << " ";
         cout << "\n";
     }
     return 0;
