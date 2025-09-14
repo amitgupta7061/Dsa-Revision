@@ -10,13 +10,13 @@ struct TreeNode {
 
 class Solution {
 public:
-    vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> inorderTraversal(TreeNode* root) {
         vector<int> result;
         TreeNode* curr = root;
 
         while (curr) {
             if (curr->left == NULL) {
-                // No left child → visit and go right
+                // No left child → visit directly
                 result.push_back(curr->val);
                 curr = curr->right;
             } else {
@@ -28,13 +28,13 @@ public:
                 }
 
                 if (prev->right == NULL) {
-                    // Make thread and visit BEFORE going left
-                    result.push_back(curr->val);
+                    // Make thread and go left (do NOT visit yet)
                     prev->right = curr;
                     curr = curr->left;
                 } else {
-                    // Thread exists → break it and move right
+                    // Thread exists → break it and visit
                     prev->right = NULL;
+                    result.push_back(curr->val);
                     curr = curr->right;
                 }
             }
@@ -43,8 +43,6 @@ public:
         return result;
     }
 };
-
-
 
 
 int main() {
