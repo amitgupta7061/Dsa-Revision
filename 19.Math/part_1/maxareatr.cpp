@@ -10,14 +10,12 @@ public:
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 for (int k = j + 1; k < n; k++) {
-                    // side lengths
                     double a = getDist(points[i], points[j]);
                     double b = getDist(points[j], points[k]);
                     double c = getDist(points[k], points[i]);
 
                     double S = (a + b + c) / 2.0; // semi-perimeter
 
-                    // Heron's formula
                     double radicand = S * (S - a) * (S - b) * (S - c);
                     if (radicand < 0) radicand = 0.0; // safeguard
 

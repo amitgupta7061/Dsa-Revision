@@ -23,12 +23,10 @@ public:
         vector<int> vis(V, 0);
         stack<int> st;
 
-        // Step 1: DFS order (finish times)
         for (int i = 0; i < V; i++) {
             if (!vis[i]) dfs1(i, adj, vis, st);
         }
 
-        // Step 2: Transpose graph
         vector<int> adjT[V];
         for (int i = 0; i < V; i++) {
             for (int neigh : adj[i]) {
@@ -36,7 +34,6 @@ public:
             }
         }
 
-        // Step 3: DFS on transpose graph
         fill(vis.begin(), vis.end(), 0);
         vector<vector<int>> sccs;
 
@@ -57,7 +54,6 @@ int main() {
     int V = 5;
     vector<int> adj[V];
 
-    // Example graph
     adj[0] = {1};
     adj[1] = {2};
     adj[2] = {0,3};

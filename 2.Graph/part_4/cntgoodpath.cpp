@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Brute force
 class Solution {
 public:
     int cntAllPath(int src, int f, vector<int> adj[], vector<int> &visited, int val, vector<int> &vals, int &cnt){
@@ -41,7 +40,6 @@ public:
     }
 };
 
-// Optimal
 class Solution {
 public:
     class DisjointSet{

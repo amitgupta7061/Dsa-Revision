@@ -22,7 +22,6 @@ public:
             }
         }
 
-        // find common max language
         int maxpeopleknow = 0;
         vector<int> knownlang(n+1, 0);
         for(auto &user : sadUsers){

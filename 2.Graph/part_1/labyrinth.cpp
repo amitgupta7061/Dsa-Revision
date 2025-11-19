@@ -59,7 +59,6 @@ int main() {
     if (!found) {
         cout << "NO\n";
     } else {
-        // Backtrack to build path
         string path = "";
         while (end != start) {
             char dir = move_dir[end.first][end.second];

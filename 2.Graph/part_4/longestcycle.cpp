@@ -18,7 +18,6 @@ public:
                 node = edges[node];
             }
 
-            // Found a cycle within this DFS chain
             if(node != -1 && step.count(node)) {
                 ans = max(ans, timer - step[node]);
             }

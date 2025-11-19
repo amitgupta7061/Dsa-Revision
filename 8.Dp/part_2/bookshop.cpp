@@ -27,12 +27,10 @@ int main() {
 
 
 
-    // Top down
     vector<vector<int>> dp(n, vector<int>(k, -1));
 
     cout<< f(prices, pages, 0, k, dp);
 
-    // bottom up
 
     
 

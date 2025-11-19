@@ -7,12 +7,10 @@ public:
         unordered_set<string> wordSet(wordList.begin(), wordList.end());
         vector<vector<string>> result;
         
-        // If endWord is not in wordList, no transformation possible
         if (wordSet.find(endWord) == wordSet.end()) {
             return result;
         }
         
-        // BFS to find shortest path and build adjacency map
         unordered_map<string, vector<string>> neighbors;
         unordered_map<string, int> distances;
         
@@ -31,7 +29,6 @@ public:
                 string currentWord = q.front();
                 q.pop();
                 
-                // Try changing each character
                 for (int j = 0; j < currentWord.length(); j++) {
                     char originalChar = currentWord[j];
                     
@@ -46,7 +43,6 @@ public:
                                 found = true;
                             }
                             
-                            // If this word hasn't been visited before, or visited at same level
                             if (distances.find(newWord) == distances.end()) {
                                 distances[newWord] = level + 1;
                                 visited.insert(newWord);
@@ -60,19 +56,16 @@ public:
                 }
             }
             
-            // Add all words visited in this level to queue for next level
             for (const string& word : visited) {
                 q.push(word);
             }
             level++;
         }
         
-        // If no path found
         if (!found) {
             return result;
         }
         
-        // DFS to reconstruct all paths
         vector<string> path = {endWord};
         dfs(endWord, beginWord, neighbors, path, result);
         

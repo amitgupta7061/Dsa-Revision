@@ -43,7 +43,6 @@ public:
         for (int i = n - 1; i >= 0; --i) {
             long long skip = (i + 1 < n) ? t[i + 1] : 0;
 
-            //take current value
             int j   = lower_bound(begin(nums) + i + 1, end(nums), nums[i] + 3) - begin(nums);
             long long take = nums[i] * mp[nums[i]] + ((j < n) ? t[j] : 0);
 

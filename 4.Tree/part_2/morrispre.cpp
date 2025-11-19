@@ -16,24 +16,20 @@ public:
 
         while (curr) {
             if (curr->left == NULL) {
-                // No left child → visit and go right
                 result.push_back(curr->val);
                 curr = curr->right;
             } else {
                 TreeNode* prev = curr->left;
 
-                // Find inorder predecessor
                 while (prev->right && prev->right != curr) {
                     prev = prev->right;
                 }
 
                 if (prev->right == NULL) {
-                    // Make thread and visit BEFORE going left
                     result.push_back(curr->val);
                     prev->right = curr;
                     curr = curr->left;
                 } else {
-                    // Thread exists → break it and move right
                     prev->right = NULL;
                     curr = curr->right;
                 }

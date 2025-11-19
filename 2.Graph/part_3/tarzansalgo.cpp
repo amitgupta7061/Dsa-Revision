@@ -23,7 +23,6 @@ public:
                 }
             }
 
-            // if u is root of SCC
             if (lowtime[node] == discovery[node]) {
                 sccCount++;
                 while (true) {
