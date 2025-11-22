@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int minimumOperations(vector<int>& nums) {
+        return ranges::count_if(nums, [](int num) { return num % 3 != 0; });
+    }
+};
+
+
+
+
+int main() {
+
+    return 0;
+}
