@@ -12,7 +12,7 @@ public:
         for (int len = 1; len <= k; ++len) {
             n = (n * 10 + 1) % k;
             if (n == 0) return len;
-            if (seen.contains(n)) return -1;
+            if (seen.count(n)) return -1;
             seen.insert(n);
         }
 
