@@ -23,5 +23,17 @@ public:
 
 int main() {
 
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<int> batteries(m);
+    for (int i = 0; i < m; ++i) {
+        cin >> batteries[i];
+    }
+
+    Solution sol;
+    cout << sol.maxRunTime(n, batteries) << "\n";
+
     return 0;
 }
