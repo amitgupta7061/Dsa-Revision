@@ -1,9 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-#include <bits/stdc++.h>
-using namespace std;
-
 class Solution {
 public:
     const int MOD = 1e9 + 7;
@@ -31,11 +27,6 @@ public:
     }
 };
 
-
-int main() {
-
-    return 0;
-}
 
 int main() {
 
