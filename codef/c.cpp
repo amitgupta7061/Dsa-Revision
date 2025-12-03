@@ -1,64 +1,60 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
+void solve() {
+    int N;
+    if (!(cin >> N)) return;
+    
+    vector<long long> A(N), B(N);
+    for(int i = 0; i < N; ++i) cin >> A[i];
+    for(int i = 0; i < N; ++i) cin >> B[i];
+
+    vector<long long> leftA(N), rightA(N);
+    vector<long long> leftB(N), rightB(N);
+
+    leftA[0] = A[0];
+    leftA[0] = A[0];
+    for(int i = 1; i < N; ++i) {
+        leftA[i] = max(A[i], A[i] + leftA[i-1]);
+    }
+    rightA[N-1] = A[N-1];
+    for(int i = N - 2; i >= 0; --i) {
+        rightA[i] = max(A[i], A[i] + rightA[i+1]);
+    }
+    leftB[0] = B[0];
+    for(int i = 1; i < N; ++i) {
+        leftB[i] = max(B[i], B[i] + leftB[i-1]);
+    }
+    rightB[N-1] = B[N-1];
+    for(int i = N - 2; i >= 0; --i) {
+        rightB[i] = max(B[i], B[i] + rightB[i+1]);
+    }
+
+    long long max_score = -4e18;
+
+    for(int i = 0; i < N; ++i) {
+        long long max_A_at_i = leftA[i] + rightA[i] - A[i];
+        long long max_B_at_i = leftB[i] + rightB[i] - B[i];
+        if (max_A_at_i + max_B_at_i > max_score) {
+            max_score = max_A_at_i + max_B_at_i;
+        }
+    }
+
+    cout << max_score << "\n";
+}
+
 int main() {
-    int test;
-    cin >> test;
-    while (test--) {
-        vector<int> left(200005), right(200005), active(200005);
-        vector<long long> val(200005);
-
-        int n;
-        cin >> n;
-        set<pair<long long, int>> pq;
-
-        int merge = 0;
-        long long total = 0;
-
-        for (int i = 0; i < n; ++i) {
-            cin >> val[i];
-            left[i] = (i - 1 + n) % n;
-            active[i] = true;
-            right[i] = (i + 1) % n;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int T;
+    if (cin >> T) {
+        while(T--) {
+            solve();
         }
-
-        if (n == 1) {
-            cout<<0<<"\n"; continue;;
-        }
-
-        for (int i = 0; i < n; i++) {
-            long long c = max(val[i], val[right[i]]);
-            pq.insert({c, i});
-        }
-
-        while (merge < n - 1) {
-            auto curr = *pq.begin();
-            pq.erase(pq.begin());
-
-            long long c = curr.first;
-            int i = curr.second, j = right[i];
-
-            if (!active[i] or !active[j]) continue;
-            total += c;
-            merge++;
-
-            active[j] = false;
-            val[i] = max(val[i], val[j]);
-
-            int l = left[i], k = right[j];
-            right[l] = i;
-            left[i] = l;
-            right[i] = k;
-            left[k] = i;
-
-            if (merge < n - 1) { 
-                pq.insert({max(val[l], val[i]), l});
-                pq.insert({max(val[i], val[k]), i});
-            }
-        }
-
-        cout<<total<<"\n";
     }
     return 0;
 }
-

@@ -44,13 +44,3 @@ int main() {
 
     return 0;
 }
-
-// Input:
-// n = 5, k = 4
-// tree[] = {2, 3, 6, 2, 4}
-// Output: 3
-// Explanation: Wood collected by cutting trees
-// at height 3 = 0 + 0 + (6-3) + 0 + (4-3) = 4
-// hence 3 is to be subtracted from all numbers.
-// Since 2 is lesser than 3, nothing gets
-// subtracted from it.
