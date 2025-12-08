@@ -1,50 +1,34 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-vector<long long> divisors;
-long long ans;
-
-void findDivisors(long long n) {
-    divisors.clear();
-    for (long long i = 2; i * i <= n; ++i) {
-        if (n % i == 0) {
-            divisors.push_back(i);
-            if (i * i != n) {
-                divisors.push_back(n / i);
-            }
-        }
-    }
-    divisors.push_back(n);
-    sort(divisors.begin(), divisors.end());
-}
-
-void f(long long k, int ind, long long sum, long long n) {
-    if (sum + k <= n) ans++;
-    for (int i = ind; i < divisors.size(); ++i) {
-        long long d = divisors[i];
-        if (d * d > k) break;
-        if (k % d == 0) {
-            f(k / d, i, sum + d, n);
-        }
-    }
-}
-
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     int t;
     cin >> t;
     while (t--) {
-        long long n;
+        int n;
         cin >> n;
-
-        if (n == 1) {
-            cout << 1 << endl;
-            continue;
+        set<int> colors;
+        for (int i = 0; i < n; i++) {
+            int a;
+            cin >> a;
+            colors.insert(a);
         }
-
-        ans = 0;
-        findDivisors(n);
-        f(n, 0, 0, n);
-        cout << ans << endl;
+        while (true) {
+            int distinctCount = colors.size();
+            if (colors.count(distinctCount)) {
+                cout << distinctCount << "\n";
+                break;
+            }
+            colors.insert(distinctCount);
+            if (colors.size() > 2000) {
+                cout << distinctCount << "\n";
+                break;
+            }
+        }
     }
+    
     return 0;
 }

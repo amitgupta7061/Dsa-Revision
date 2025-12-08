@@ -1,60 +1,52 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include<bits/stdc++.h>
 using namespace std;
 
-void solve() {
-    int N;
-    if (!(cin >> N)) return;
-    
-    vector<long long> A(N), B(N);
-    for(int i = 0; i < N; ++i) cin >> A[i];
-    for(int i = 0; i < N; ++i) cin >> B[i];
+void f() {
+    string s, t;
+    cin >> s >> t;
 
-    vector<long long> leftA(N), rightA(N);
-    vector<long long> leftB(N), rightB(N);
+    vector<int> scnt(26, 0), tcnt(26, 0), extras(26, 0);
 
-    leftA[0] = A[0];
-    leftA[0] = A[0];
-    for(int i = 1; i < N; ++i) {
-        leftA[i] = max(A[i], A[i] + leftA[i-1]);
-    }
-    rightA[N-1] = A[N-1];
-    for(int i = N - 2; i >= 0; --i) {
-        rightA[i] = max(A[i], A[i] + rightA[i+1]);
-    }
-    leftB[0] = B[0];
-    for(int i = 1; i < N; ++i) {
-        leftB[i] = max(B[i], B[i] + leftB[i-1]);
-    }
-    rightB[N-1] = B[N-1];
-    for(int i = N - 2; i >= 0; --i) {
-        rightB[i] = max(B[i], B[i] + rightB[i+1]);
+    for (char c : s) scnt[c - 'a']++;
+    for (char c : t) tcnt[c - 'a']++;
+
+    for (int i = 0; i < 26; ++i) {
+        if (tcnt[i] < scnt[i]) {
+            cout << "Impossible" << "\n";
+            return;
+        }
+        extras[i] = tcnt[i] - scnt[i];
     }
 
-    long long max_score = -4e18;
-
-    for(int i = 0; i < N; ++i) {
-        long long max_A_at_i = leftA[i] + rightA[i] - A[i];
-        long long max_B_at_i = leftB[i] + rightB[i] - B[i];
-        if (max_A_at_i + max_B_at_i > max_score) {
-            max_score = max_A_at_i + max_B_at_i;
+    string result = "";
+    for (char c : s) {
+        int ind = c - 'a';
+        for (int e = 0; e < ind; ++e) {
+            while (extras[e] > 0) {
+                result += (char)('a' + e);
+                extras[e]--;
+            }
+        }
+        result += c;
+    }
+    for (int i = 0; i < 26; ++i) {
+        while (extras[i] > 0) {
+            result += (char)('a' + i);
+            extras[i]--;
         }
     }
 
-    cout << max_score << "\n";
+    cout << result << "\n";
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int T;
-    if (cin >> T) {
-        while(T--) {
-            solve();
-        }
+    int t;
+    cin >> t;
+    while (t--) {
+        f();
     }
     return 0;
 }
