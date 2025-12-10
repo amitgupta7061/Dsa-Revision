@@ -1,92 +1,70 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int MOD = 998244353;
+const int MAX = 200005;
+
+long long fact[MAX];
+long long invFact[MAX];
+
+long long power(long long base, long long exp) {
+    long long res = 1;
+    base %= MOD;
+    while (exp > 0) {
+        if (exp % 2 == 1) res = (res * base) % MOD;
+        base = (base * base) % MOD;
+        exp /= 2;
+    }
+    return res;
+}
+
+long long modInverse(long long n) {
+    return power(n, MOD - 2);
+}
+
+void precompute() {
+    fact[0] = 1;
+    for (int i = 1; i < MAX; i++) {
+        fact[i] = (fact[i - 1] * i) % MOD;
+    }
+    invFact[MAX - 1] = modInverse(fact[MAX - 1]);
+    for (int i = MAX - 2; i >= 0; i--) {
+        invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;
+    }
+}
+
+long long nPr(int n, int r) {
+    if (r < 0 || r > n) return 0;
+    return (fact[n] * invFact[n - r]) % MOD;
+}
+
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    
+    precompute();
     
     int t;
     cin >> t;
-    
     while (t--) {
-        int n, x;
-        cin >> n >> x;
+        int n, k;
+        cin >> n >> k;
         
-        vector<int> a(n);
-        vector<int> positions; // positions with known values (not -1)
-        vector<int> minus1_pos; // positions with -1
-        map<int, int> cnt; // count of each value
+        long long totalSum = 0;
+        int limit = min(n, k);
         
-        for (int i = 0; i < n; i++) {
-            cin >> a[i];
-            if (a[i] == -1) {
-                minus1_pos.push_back(i);
-            } else {
-                positions.push_back(i);
-                cnt[a[i]]++;
-            }
+        for (int d = 1; d <= limit; d++) {
+            long long ways = nPr(k, d);
+            long long remaining = power(k - d + 1, n - d);
+            long long term = (ways * remaining) % MOD;
+            totalSum = (totalSum + term) % MOD;
         }
         
-        // Greedy: place all X first, then others
-        // Build the arrangement
-        vector<int> values;
-        int x_count = cnt[x];
-        for (int i = 0; i < x_count; i++) values.push_back(x);
-        for (auto& [v, c] : cnt) {
-            if (v != x) {
-                for (int i = 0; i < c; i++) values. push_back(v);
-            }
+        if (n <= k) {
+            long long distinct = nPr(k, n);
+            long long subtract = (n * distinct) % MOD;
+            totalSum = (totalSum - subtract + MOD) % MOD;
         }
         
-        // Assign values to positions (sorted)
-        sort(positions.begin(), positions. end());
-        vector<int> arr(n, -1);
-        for (int i = 0; i < (int)positions.size(); i++) {
-            arr[positions[i]] = values[i];
-        }
-        
-        // Simulate voting
-        map<int, int> freq;
-        map<int, int> votes;
-        
-        for (int i = 0; i < n; i++) {
-            if (arr[i] != -1) {
-                freq[arr[i]]++;
-                votes[arr[i]]++;
-            } else {
-                // Find unique max frequency value
-                int max_freq = 0;
-                for (auto& [v, f] : freq) max_freq = max(max_freq, f);
-                
-                int max_count = 0;
-                int max_val = -1;
-                for (auto& [v, f] : freq) {
-                    if (f == max_freq) {
-                        max_count++;
-                        max_val = v;
-                    }
-                }
-                
-                if (max_count == 1 && max_val != -1) {
-                    votes[max_val]++;
-                }
-                // else: person doesn't vote
-            }
-        }
-        
-        // Check if X wins uniquely
-        int x_votes = votes[x];
-        bool wins = true;
-        if (x_votes == 0) wins = false;
-        for (auto& [v, vt] : votes) {
-            if (v != x && vt >= x_votes) {
-                wins = false;
-                break;
-            }
-        }
-        
-        cout << (wins ? "Yes" : "No") << "\n";
+        cout << totalSum << "\n";
     }
-    
     return 0;
 }
