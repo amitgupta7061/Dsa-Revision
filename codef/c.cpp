@@ -1,52 +1,57 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-void f() {
-    string s, t;
-    cin >> s >> t;
+void solve() {
+    long long n, k;
+    if (!(cin >> n >> k)) return;
 
-    vector<int> scnt(26, 0), tcnt(26, 0), extras(26, 0);
-
-    for (char c : s) scnt[c - 'a']++;
-    for (char c : t) tcnt[c - 'a']++;
-
-    for (int i = 0; i < 26; ++i) {
-        if (tcnt[i] < scnt[i]) {
-            cout << "Impossible" << "\n";
-            return;
+    if (k % 2 != 0) {
+        // k is odd: maximize everything to n
+        for (int i = 0; i < k; ++i) {
+            cout << n << (i == k - 1 ? "" : " ");
         }
-        extras[i] = tcnt[i] - scnt[i];
+        cout << "\n";
+        return;
     }
 
-    string result = "";
-    for (char c : s) {
-        int ind = c - 'a';
-        for (int e = 0; e < ind; ++e) {
-            while (extras[e] > 0) {
-                result += (char)('a' + e);
-                extras[e]--;
+    // k is even: use k-2 copies of n and maximize the remaining pair
+    vector<int> set_bits;
+    for (int i = 30; i >= 0; --i) {
+        if ((n >> i) & 1) set_bits.push_back(i);
+    }
+
+    if (set_bits.size() < 2) {
+        // n is a power of 2: cannot improve over (k-1)*n
+        for (int i = 0; i < k - 1; ++i) cout << n << " ";
+        cout << "0\n";
+    } else {
+        int p1 = set_bits[0];
+        int p2 = set_bits[1];
+        long long X = 0;
+        // Collect all bits where n has 0 below the second highest set bit
+        for (int i = 0; i < p2; ++i) {
+            if (!((n >> i) & 1)) {
+                X |= (1LL << i);
             }
         }
-        result += c;
-    }
-    for (int i = 0; i < 26; ++i) {
-        while (extras[i] > 0) {
-            result += (char)('a' + i);
-            extras[i]--;
-        }
-    }
 
-    cout << result << "\n";
+        long long a = (1LL << p1) | X;
+        long long b = (n ^ (1LL << p1)) | X;
+
+        for (int i = 0; i < k - 2; ++i) cout << n << " ";
+        cout << a << " " << b << "\n";
+    }
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
     int t;
     cin >> t;
     while (t--) {
-        f();
+        solve();
     }
     return 0;
 }

@@ -1,23 +1,22 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
     int t;
     cin >> t;
     while (t--) {
-        int n;
-        cin >> n;
-        vector<int> a(n);
-        for (int i = 0; i < n; ++i) {
-            cin >> a[i];
-        }
-        int cnt = 0, maxi = 0;
-        for (int x : a) {
-            if (x < maxi) cnt++;
-            else maxi = x;
+        int l, a, b;
+        cin >> l >> a >> b;
+
+        int g = gcd(l, b), steps = l / g;
+        int pos = a, res = pos;
+
+        for (int i = 1; i < steps; i++) {
+            pos = (pos + b) % l;
+            res = max(res, pos);
         }
 
-        cout<<cnt<<endl;
+        cout << res << "\n";
     }
     return 0;
 }

@@ -2,28 +2,27 @@
 using namespace std;
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    
     int t;
     cin >> t;
     while (t--) {
         int n;
-        string s;
-        cin >> n >> s;
-        vector<int> pos;
-        for (int i = 0; i < n; ++i)
-            if (s[i] == '1') pos.push_back(i);
-        if (pos.size() == n) {
-            cout << 0 << '\n';
-            continue;
+        cin >> n;
+        
+        vector<string> arr(n);
+        for(auto &it : arr) cin >> it;
+        
+        string res = "";
+        
+        for (int i = 0; i < n; i++) {
+            string start = arr[i] + res, end = res + arr[i];
+            
+            if (start < end) res = start;
+            else res = end;
         }
-        int m = pos.size(), ans = 0;
-        for (int i = 0; i < m; ++i) {
-            int j = (i + 1) % m;
-            int gap = (pos[j] - pos[i] - 1 + n) % n;
-            ans = max(ans, gap);
-        }
-        cout << ans << '\n';
+        
+        cout << res << "\n";
     }
+    
     return 0;
 }

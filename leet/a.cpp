@@ -1,40 +1,32 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+
 
 class Solution {
 public:
-    long long minMoves(vector<int>& balance) {
-        long long sum = 0;
-        int negind = -1, n = balance.size();
+    int minSwaps(vector<int>& nums, vector<int>& forbidden) {
+        unordered_map<int, int> numfreq, forbfreq;
+        for (auto it : nums) numfreq[it]++;
+        for (auto it : forbidden) forbfreq[it]++;
 
-        for (int i = 0; i < n; ++i) {
-            sum += balance[i];
-            if (balance[i] < 0)  negind = i;
+        for (auto &[val, cnt] : numfreq) {
+            if ((long long)cnt + forbfreq[val] > nums.size())  return -1;
         }
 
-        if (sum < 0) return -1;
-        if (negind == -1) return 0;
-
-        long long need = - (long long)balance[negind], ans = 0;
-        vector<pair<int, int>> temp;
-
-        for (int i = 0; i < n; i++) {
-            if (balance[i] > 0) {
-                int dist = abs(i - negind);
-                dist = min(dist, n - dist);
-                temp.push_back({dist, balance[i]});
+        unordered_map<int, int> mp;
+        int total = 0, maxi = 0;
+        
+        for (int i = 0; i < nums.size(); ++i) {
+            if (nums[i] == forbidden[i]) {
+                mp[nums[i]]++;
+                total++;
             }
         }
 
-        sort(temp.begin(), temp.end());
-        for (auto& [dist, amt] : temp) {
-            long long take = min((long long)amt, need);
-            
-            ans += take * dist;
-            need -= take;
-            if (need == 0) break;
+        for (auto &[val, cnt] : mp) {
+            maxi = max(maxi, cnt);
         }
-
-        return ans;
+        
+        return max(maxi, (total + 1) / 2);
     }
 };
