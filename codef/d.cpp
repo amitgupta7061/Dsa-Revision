@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -7,20 +7,32 @@ int main() {
     while (t--) {
         int n;
         cin >> n;
-        vector<long long> x(n);
-        for(auto &it : x) cin >> it;
 
-        if (n < 2) {
-            cout << 0 << "\n";
-            continue;
+        int cnt = 1 << n, curr = (1 << n) - 1;
+        vector<int> visited(cnt, false), perm, mask;
+        perm.reserve(cnt);
+        
+        while (true) {
+            mask.push_back(curr);
+            if (curr == 0) break;
+            int ind = 31 - __builtin_clz(curr);
+            curr ^= (1 << ind);
         }
 
-        long long res = 0;
-
-        for (int i = 0; i < n - 1; i++) {
-            if (x[i+1] - x[i] == 1) res++;
+        for (auto it : mask) {
+            for (int i = 0; i < cnt; i++) {
+                if (!visited[i]) {
+                    if ((i & it) == it) {
+                        visited[i] = true;
+                        perm.push_back(i);
+                    }
+                }
+            }
         }
-        cout << res << "\n";
+        for (int i = 0; i < cnt; i++) {
+            cout << perm[i] << " ";
+        }
+        cout << "\n";
     }
     return 0;
 }

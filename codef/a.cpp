@@ -1,22 +1,15 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 int main() {
     int t;
     cin >> t;
+    
     while (t--) {
-        int l, a, b;
-        cin >> l >> a >> b;
-
-        int g = gcd(l, b), steps = l / g;
-        int pos = a, res = pos;
-
-        for (int i = 1; i < steps; i++) {
-            pos = (pos + b) % l;
-            res = max(res, pos);
-        }
-
-        cout << res << "\n";
+        int k, x;
+        cin >> k >> x;
+        cout << k * x + 1 << endl;
     }
+    
     return 0;
 }
