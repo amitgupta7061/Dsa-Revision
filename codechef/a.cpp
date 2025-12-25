@@ -1,70 +1,56 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-const int MOD = 998244353;
-const int MAX = 200005;
+int N;
+vector<int> A;
+vector<int> C;
+long long memo[105][105][105];
 
-long long fact[MAX];
-long long invFact[MAX];
+const long long INF = 1e18;
 
-long long power(long long base, long long exp) {
-    long long res = 1;
-    base %= MOD;
-    while (exp > 0) {
-        if (exp % 2 == 1) res = (res * base) % MOD;
-        base = (base * base) % MOD;
-        exp /= 2;
+long long solve(int L, int R, int K) {
+    // Base case: Empty subarray costs 0
+    if (L > R) {
+        return 0;
     }
-    return res;
-}
-
-long long modInverse(long long n) {
-    return power(n, MOD - 2);
-}
-
-void precompute() {
-    fact[0] = 1;
-    for (int i = 1; i < MAX; i++) {
-        fact[i] = (fact[i - 1] * i) % MOD;
+    
+    // Check memoization
+    if (memo[L][R][K] != -1) {
+        return memo[L][R][K];
     }
-    invFact[MAX - 1] = modInverse(fact[MAX - 1]);
-    for (int i = MAX - 2; i >= 0; i--) {
-        invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;
+    
+    long long min_cost = INF;
+    for (int i = L; i <= R; ++i) {
+        long long current_val_cost = (long long)A[i] * C[K];
+        long long left_cost = solve(L, i - 1, K);
+        long long right_cost_opt1 = solve(i + 1, R, K + 1);
+        long long right_cost_opt2 = solve(i + 1, R, K + (i - L) + 1);
+        
+        long long total = current_val_cost + left_cost + min(right_cost_opt1, right_cost_opt2);
+        
+        if (total < min_cost) {
+            min_cost = total;
+        }
     }
+    
+    return memo[L][R][K] = min_cost;
 }
 
-long long nPr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    return (fact[n] * invFact[n - r]) % MOD;
-}
 
 int main() {
     
-    precompute();
-    
-    int t;
-    cin >> t;
-    while (t--) {
-        int n, k;
-        cin >> n >> k;
-        
-        long long totalSum = 0;
-        int limit = min(n, k);
-        
-        for (int d = 1; d <= limit; d++) {
-            long long ways = nPr(k, d);
-            long long remaining = power(k - d + 1, n - d);
-            long long term = (ways * remaining) % MOD;
-            totalSum = (totalSum + term) % MOD;
+    int T;
+    if (cin >> T) {
+        while (T--) {
+            cin >> N;
+            A.resize(N);
+            C.resize(N);
+            
+            for (int i = 0; i < N; ++i) cin >> A[i];
+            for (int i = 0; i < N; ++i) cin >> C[i];
+            memset(memo, -1, sizeof(memo));
+            cout << solve(0, N - 1, 0) << endl;
         }
-        
-        if (n <= k) {
-            long long distinct = nPr(k, n);
-            long long subtract = (n * distinct) % MOD;
-            totalSum = (totalSum - subtract + MOD) % MOD;
-        }
-        
-        cout << totalSum << "\n";
     }
     return 0;
 }
