@@ -53,17 +53,10 @@ public:
         unordered_set<string> result;
         int leftcnt = 0, rghtcnt = 0, n = s.size();
     
-        for (char& ch : s) {
-            if (ch == '(') {
-                leftcnt++;
-            } else if (ch == ')') {
-                if (leftcnt > 0) {
-                    leftcnt--;
-                } else {
-                    rghtcnt++;
-                }
-            }
-        }
+        for (char ch : s){
+            if (ch == '(') leftcnt++;
+            else if (ch == ')') leftcnt == 0 ? rghtcnt++ : leftcnt--;
+        }   
 
         function<void(int, int, int, int, int, string)> dfs = [&](int ind, int leftRem, int rightRem, int leftCount, int rightCount, string current) {
             if (ind == n) {
