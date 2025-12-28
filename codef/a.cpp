@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -6,9 +6,10 @@ int main() {
     cin >> t;
     
     while (t--) {
-        int k, x;
-        cin >> k >> x;
-        cout << k * x + 1 << endl;
+        string s;
+        cin >> s;
+        int cnt = count(s.begin(), s.end(), 'Y');
+        cout << (cnt <= 1 ? "YES" : "NO") << "\n";
     }
     
     return 0;

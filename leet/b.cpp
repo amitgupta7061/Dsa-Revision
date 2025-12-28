@@ -3,33 +3,21 @@ using namespace std;
 
 class Solution {
 public:
-    int f(int num) {
-        int rev = 0;
-        while (num > 0) {
-            rev = rev * 10 + num % 10;
-            num /= 10;
+    int minAllOneMultiple(int k) {
+        if (k % 2 == 0 || k % 5 == 0) return -1;
+        int rem = 0;
+        for (int len = 1; len <= k; len++) {
+            rem = (rem * 10 + 1) % k;
+            if (rem == 0) return len;
         }
-        return rev;
-    }
-
-    int minMirrorPairDistance(vector<int>& nums) {
-        unordered_map<int, int> seen;
-        int cnt = INT_MAX;
-
-        for (int i = 0; i < nums.size(); i++) {
-            int rev = f(nums[i]);
-            if (seen.count(rev)) {
-                cnt = min(cnt, i - seen[rev]);
-            }
-            seen[nums[i]] = i;
-        }
-
-        return cnt == INT_MAX ? -1 : cnt;
+        return -1;
     }
 };
 
-
 int main() {
-
+    Solution sol;
+    cout << sol.minAllOneMultiple(3) << endl;  // Expected: 3
+    cout << sol.minAllOneMultiple(7) << endl;  // Expected: 6
+    cout << sol.minAllOneMultiple(2) << endl;  // Expected: -1
     return 0;
 }

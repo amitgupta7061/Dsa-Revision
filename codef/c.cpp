@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -9,16 +9,23 @@ int main() {
         cin >> n;
         vector<long long> nums(n);
         for(auto &it : nums) cin >> it;
-        sort(nums.begin(), nums.end());
-        long long fst = nums[0], mini = -1;
-        
+
+        long long curr = 0;
         for (int i = 1; i < n; ++i) {
-            long long diff = nums[i] - nums[0];
-            if (mini == -1 or diff < mini)  mini = diff;
+            curr -= nums[i];
         }
-        
-        long long scnd = mini;
-        cout << max(fst, scnd) << endl;
+
+        long long maxi = curr;
+
+        for (int i = 0; i < n - 1; ++i) {
+            long long gain = (i == 0 ? nums[i] : abs(nums[i]));
+            long long loss = nums[i+1];
+
+            curr += gain + loss;
+            maxi = max(maxi, curr);
+        }
+
+        cout << maxi << "\n";
     }
     return 0;
 }
