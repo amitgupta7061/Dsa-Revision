@@ -1,14 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 class Solution {
 public:
-    long long minimumCost©leetcode(int cost1, int cost2, int costBoth, int need1, int need2) {
-        auto calcCost = [&](long long k) -> long long {
-            long long remaining1 = max(0LL, need1 - k);
-            long long remaining2 = max(0LL, need2 - k);
-            return k * costBoth + remaining1 * cost1 + remaining2 * cost2;
-        };
-        long long ans = calcCost(0);
-        ans = min(ans, calcCost(min(need1, need2)));
-        ans = min(ans, calcCost(max(need1, need2)));
-        return ans;
+    int findMaxVal(int n, vector<vector<int>>& restrictions, vector<int>& diff) {
+        vector<long long> result(n, 0);
+        for (int i = 1; i < n; i++) {
+            result[i] = result[i - 1] + diff[i - 1];
+        }
+
+        for (auto &it : restrictions) {
+            result[it[0]] = min(result[it[0]], (long long)it[1]);
+        }
+
+        for (int i = n - 2; i >= 0; i--) {
+            result[i] = min(result[i], result[i + 1] + diff[i]);
+        }
+
+        for (int i = 1; i < n; i++) {
+            result[i] = min(result[i], result[i - 1] + diff[i - 1]);
+        }
+        return *max_element(result.begin(), result.end());
     }
 };
+
+
+int main() {
+
+    return 0;
+}
