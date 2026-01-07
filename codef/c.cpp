@@ -5,27 +5,29 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        int n;
-        cin >> n;
-        vector<long long> nums(n);
-        for(auto &it : nums) cin >> it;
+        long long n, m, k;
+        cin >> n >> m >> k;
 
-        long long curr = 0;
-        for (int i = 1; i < n; ++i) {
-            curr -= nums[i];
+        long long lmaxi = k - 1, rmaxi = n - k, result = 1;
+
+        for (long long l = 0; l <= lmaxi; ++l) {
+            if (2 * l - 1 <= m) {
+                long long cost = m + 1 - 2 * l;
+                long long r = min({rmaxi, l, cost});
+                
+                if (r >= 0) {
+                    result = max(result, l + r + 1);
+                }
+            }
+            
+            long long cost = (m + 1 - l) / 2, r = min(rmaxi, cost);
+            
+            if (r > l) {
+                result = max(result, l + r + 1);
+            }
         }
 
-        long long maxi = curr;
-
-        for (int i = 0; i < n - 1; ++i) {
-            long long gain = (i == 0 ? nums[i] : abs(nums[i]));
-            long long loss = nums[i+1];
-
-            curr += gain + loss;
-            maxi = max(maxi, curr);
-        }
-
-        cout << maxi << "\n";
+        cout << result << endl;
     }
     return 0;
 }

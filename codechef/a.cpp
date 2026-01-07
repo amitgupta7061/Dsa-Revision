@@ -1,56 +1,60 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-int N;
-vector<int> A;
-vector<int> C;
-long long memo[105][105][105];
-
-const long long INF = 1e18;
-
-long long solve(int L, int R, int K) {
-    // Base case: Empty subarray costs 0
-    if (L > R) {
-        return 0;
-    }
-    
-    // Check memoization
-    if (memo[L][R][K] != -1) {
-        return memo[L][R][K];
-    }
-    
-    long long min_cost = INF;
-    for (int i = L; i <= R; ++i) {
-        long long current_val_cost = (long long)A[i] * C[K];
-        long long left_cost = solve(L, i - 1, K);
-        long long right_cost_opt1 = solve(i + 1, R, K + 1);
-        long long right_cost_opt2 = solve(i + 1, R, K + (i - L) + 1);
-        
-        long long total = current_val_cost + left_cost + min(right_cost_opt1, right_cost_opt2);
-        
-        if (total < min_cost) {
-            min_cost = total;
-        }
-    }
-    
-    return memo[L][R][K] = min_cost;
-}
-
-
 int main() {
+    int t;
+    cin >> t;
     
-    int T;
-    if (cin >> T) {
-        while (T--) {
-            cin >> N;
-            A.resize(N);
-            C.resize(N);
-            
-            for (int i = 0; i < N; ++i) cin >> A[i];
-            for (int i = 0; i < N; ++i) cin >> C[i];
-            memset(memo, -1, sizeof(memo));
-            cout << solve(0, N - 1, 0) << endl;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n), b(n);
+        for (int i = 0; i < n; i++) cin >> a[i];
+        for (int i = 0; i < n; i++) cin >> b[i];
+        
+        vector<int> mn(n), mx(n);
+        for (int i = 0; i < n; i++) {
+            mn[i] = min(a[i], b[i]);
+            mx[i] = max(a[i], b[i]);
         }
+        
+        vector<bool> mini(n), maxi(n);
+        mini[0] = maxi[0] = true;
+        
+        for (int i = 1; i < n; i++) {
+            if ((mini[i-1] && mn[i-1] <= mn[i]) || (maxi[i-1] && mx[i-1] <= mn[i])) {
+                mini[i] = true;
+            }
+            if ((mini[i-1] && mn[i-1] <= mn[i]) || (maxi[i-1] && mx[i-1] <= mn[i])) {
+                mini[i] = true;
+            }
+            if ((mini[i-1] && mn[i-1] <= mx[i]) || (maxi[i-1] && mx[i-1] <= mx[i])) {
+                maxi[i] = true;
+            }
+        }
+        
+        vector<bool> mini_bot(n), maxi_bot(n);
+        mini_bot[n-1] = maxi_bot[n-1] = true;
+        
+        for (int i = n-2; i >= 0; i--) {
+            if ((mini_bot[i+1] && mn[i] <= mn[i+1]) || (maxi_bot[i+1] && mn[i] <= mx[i+1])) {
+                mini_bot[i] = true;
+            }
+            if ((mini_bot[i+1] && mx[i] <= mn[i+1]) || (maxi_bot[i+1] && mx[i] <= mx[i+1])) {
+                maxi_bot[i] = true;
+            }
+        }
+        
+        bool flag = false;
+        for (int k = 0; k < n; k++) {
+            if (mini[k] && maxi_bot[k]) {
+                flag = true;
+                break;
+            }
+        }
+        
+        cout << (flag ? "Yes" : "No") << "\n";
     }
+    
     return 0;
 }
