@@ -2,8 +2,7 @@
 using namespace std;
 
 void merge(vector<int>& arr, int l, int m, int r) {
-    int n1 = m - l + 1;
-    int n2 = r - m;
+    int n1 = m - l + 1, n2 = r - m;
 
     vector<int> L(n1), R(n2);
 
