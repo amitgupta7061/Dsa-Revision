@@ -4,22 +4,18 @@ using namespace std;
 int main() {
     int t;
     cin >> t;
-    
     while (t--) {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n);
-        for (int i = 0; i < n; i++) cin >> a[i];
-        
-        vector<bool> present(n + 2, false);
-        for (int x : a) {
-            if (x <= n) present[x] = true;
+        int n;
+        cin >> n;
+        int cnt0 = 0, cnt1 = 0;
+        for (int i = 0; i < n; i++) {
+            int a;
+            cin >> a;
+            if (a == 0) cnt0++;
+            if (a == 1) cnt1++;
         }
-        int cnt = 0;
-        while (present[cnt]) cnt++;
-        
-        cout << min(cnt, k - 1) << "\n";
+        if (cnt0 >= 1 && (cnt0 == 1 || cnt1 >= 1)) cout << "YES\n";
+        else cout << "NO\n";
     }
-    
     return 0;
 }
